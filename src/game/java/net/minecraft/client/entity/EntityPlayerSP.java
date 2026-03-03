@@ -1,5 +1,6 @@
 package net.minecraft.client.entity;
 
+import net.lax1dude.eaglercraft.v1_8.Triggerbot;
 import net.lax1dude.eaglercraft.v1_8.EaglercraftVersion;
 import net.lax1dude.eaglercraft.v1_8.sp.lan.LANClientNetworkManager;
 import net.lax1dude.eaglercraft.v1_8.sp.socket.ClientIntegratedServerNetworkManager;
@@ -139,6 +140,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
 	 * Called to update the entity's position/logic.
 	 */
 	public void onUpdate() {
+		Triggerbot.onTick(this.mc);
 		if (this.worldObj.isBlockLoaded(new BlockPos(this.posX, 0.0D, this.posZ))) {
 			super.onUpdate();
 			if (this.isRiding()) {
@@ -752,4 +754,5 @@ public class EntityPlayerSP extends AbstractClientPlayer {
 		}
 
 	}
+
 }
