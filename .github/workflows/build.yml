@@ -16,17 +16,18 @@ jobs:
       - name: Build Web Client
         run: |
           chmod +x gradlew
-          # This command triggers the specific 1.8 web build
-          ./gradlew :target_teavm_javascript:makeOfflineDownload --no-daemon
+          # This command forces BOTH the JS compile and the Offline Download
+          ./gradlew :target_teavm_javascript:teavmCompile :target_teavm_javascript:makeOfflineDownload --no-daemon
           
-          echo "--- DEBUG: SEARCHING FOR THE FINISHED HTML ---"
+          echo "--- DEBUG: WHERE IS THE GAME? ---"
           find . -name "*.html" -size +5M
           
-      - name: Upload REDUX Game
+      - name: Upload EVERYTHING
         uses: actions/upload-artifact@v4
         with:
-          name: REDUX-Playable-Game
+          name: REDUX-Client
           path: |
             javascript/*.html
             target_teavm_javascript/build/teavm/dist/*.html
             **/*.html
+            **/*.js
