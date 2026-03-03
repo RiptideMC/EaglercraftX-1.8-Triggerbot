@@ -16,18 +16,21 @@ jobs:
       - name: Build Web Client
         run: |
           chmod +x gradlew
-          # This command tells Gradle to find the build task itself
-          ./gradlew assemble --no-daemon || ./gradlew build --no-daemon
+          # This command forces the specific JavaScript target to build
+          ./gradlew :target_teavm_javascript:build --no-daemon || ./gradlew build --no-daemon
           
-          echo "--- DEBUG: LISTING ALL FILES CREATED ---"
-          find . -maxdepth 5 -not -path '*/.*'
+          echo "--- DEBUG: SEARCHING FOR WEB FILES ---"
+          find . -name "*.html"
+          find . -name "classes.js"
           
-      - name: Upload Everything Found
+      - name: Upload Finished Game
         uses: actions/upload-artifact@v4
         with:
-          name: REDUX-Client
+          name: REDUX-Playable-Game
           path: |
+            target_teavm_javascript/build/teavm/*.html
+            target_teavm_javascript/build/teavm/*.js
+            target_teavm_javascript/dist/*.html
+            javascript/*.html
             **/*.html
             **/*.js
-            **/*.epk
-            **/*.zip
