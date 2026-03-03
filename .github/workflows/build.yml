@@ -16,8 +16,13 @@ jobs:
       - name: Build Web Client
         run: |
           chmod +x gradlew
-          # This command FORCES the JavaScript and WASM compilation
-          ./gradlew :target_teavm_javascript:build :target_teavm_wasm_gc:build --no-daemon
+          # This is the EXACT command to trigger the website generation
+          ./gradlew :target_teavm_javascript:teavmCompile :target_teavm_wasm_gc:teavmCompile --no-daemon
+          
+          echo "--- DEBUG: LOCATING THE FILES ---"
+          find . -name "*.html"
+          find . -name "*.js"
+          find . -name "*.wasm"
           
       - name: Upload REDUX Game
         uses: actions/upload-artifact@v4
@@ -27,4 +32,6 @@ jobs:
             target_teavm_javascript/build/teavm/
             target_teavm_wasm_gc/build/teavm/
             javascript/
-            dist/
+            **/*.html
+            **/*.js
+            **/*.wasm
