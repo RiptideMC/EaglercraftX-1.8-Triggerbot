@@ -16,22 +16,13 @@ jobs:
       - name: Build Web Client
         run: |
           chmod +x gradlew
-          # This command tells Gradle to build EVERY sub-project
-          ./gradlew assemble --no-daemon
-          
-          echo "--- DEBUG: SCANNING EVERYTHING FOR THE GAME ---"
-          find . -name "index.html"
-          find . -name "*.js"
-          find . -name "*.wasm"
+          # This is the "Magic Word" for this specific workspace
+          ./gradlew :target_teavm_javascript:makeOfflineDownload --no-daemon
           
       - name: Upload REDUX Game
         uses: actions/upload-artifact@v4
         with:
           name: REDUX-Playable-Game
           path: |
-            **/build/teavm/**
-            **/dist/**
-            **/javascript/**
-            **/*.html
-            **/*.js
-            **/*.wasm
+            javascript/*.html
+            target_teavm_javascript/build/teavm/dist/*.html
