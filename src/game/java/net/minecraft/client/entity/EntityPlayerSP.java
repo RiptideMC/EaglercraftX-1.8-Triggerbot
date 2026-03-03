@@ -139,19 +139,21 @@ public class EntityPlayerSP extends AbstractClientPlayer {
 	/**+
 	 * Called to update the entity's position/logic.
 	 */
-	public void onUpdate() {
-		Triggerbot.onTick(this.mc);
-		if (this.worldObj.isBlockLoaded(new BlockPos(this.posX, 0.0D, this.posZ))) {
-			super.onUpdate();
+		public void onUpdate() {
+		// 1. Run the Triggerbot (REDUX)
+		net.lax1dude.eaglercraft.v1_8.Triggerbot.onTick(this.mc);
+		
+		// 2. Run the base player update (CRITICAL: Must be outside the IF)
+		super.onUpdate();
+
+		// 3. Handle world movement and packets
+		if (this.worldObj.isBlockLoaded(new net.minecraft.util.BlockPos(this.posX, 0.0D, this.posZ))) {
 			if (this.isRiding()) {
-				this.sendQueue.addToSendQueue(
-						new C03PacketPlayer.C05PacketPlayerLook(this.rotationYaw, this.rotationPitch, this.onGround));
-				this.sendQueue.addToSendQueue(new C0CPacketInput(this.moveStrafing, this.moveForward,
-						this.movementInput.jump, this.movementInput.sneak));
+				this.sendQueue.addToSendQueue(new net.minecraft.network.play.client.C03PacketPlayer.C05PacketPlayerLook(this.rotationYaw, this.rotationPitch, this.onGround));
+				this.sendQueue.addToSendQueue(new net.minecraft.network.play.client.C0CPacketInput(this.moveStrafing, this.moveForward, this.movementInput.jump, this.movementInput.sneak));
 			} else {
 				this.onUpdateWalkingPlayer();
 			}
-
 		}
 	}
 
@@ -756,3 +758,4 @@ public class EntityPlayerSP extends AbstractClientPlayer {
 	}
 
 }
+
