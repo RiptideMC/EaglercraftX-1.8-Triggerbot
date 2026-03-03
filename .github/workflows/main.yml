@@ -1,0 +1,21 @@
+name: Build REDUX 1.8 Web
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Make Offline Download
+        run: |
+          chmod +x gradlew
+          ./gradlew :target_teavm_javascript:makeOfflineDownload
+      - name: Upload HTML Client
+        uses: actions/upload-artifact@v4
+        with:
+          name: REDUX-Client
+          path: "target_teavm_javascript/build/teavm/dist/*.html"
