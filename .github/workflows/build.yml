@@ -16,8 +16,11 @@ jobs:
       - name: Build Web Client
         run: |
           chmod +x gradlew
-          # This is the "Magic Word" for this specific workspace
+          # This command triggers the specific 1.8 web build
           ./gradlew :target_teavm_javascript:makeOfflineDownload --no-daemon
+          
+          echo "--- DEBUG: SEARCHING FOR THE FINISHED HTML ---"
+          find . -name "*.html" -size +5M
           
       - name: Upload REDUX Game
         uses: actions/upload-artifact@v4
@@ -26,3 +29,4 @@ jobs:
           path: |
             javascript/*.html
             target_teavm_javascript/build/teavm/dist/*.html
+            **/*.html
