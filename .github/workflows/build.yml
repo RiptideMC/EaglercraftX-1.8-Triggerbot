@@ -16,11 +16,11 @@ jobs:
       - name: Build Web Client
         run: |
           chmod +x gradlew
-          # This is the EXACT command to trigger the website generation
-          ./gradlew :target_teavm_javascript:teavmCompile :target_teavm_wasm_gc:teavmCompile --no-daemon
+          # This command tells Gradle to build EVERY sub-project
+          ./gradlew assemble --no-daemon
           
-          echo "--- DEBUG: LOCATING THE FILES ---"
-          find . -name "*.html"
+          echo "--- DEBUG: SCANNING EVERYTHING FOR THE GAME ---"
+          find . -name "index.html"
           find . -name "*.js"
           find . -name "*.wasm"
           
@@ -29,9 +29,9 @@ jobs:
         with:
           name: REDUX-Playable-Game
           path: |
-            target_teavm_javascript/build/teavm/
-            target_teavm_wasm_gc/build/teavm/
-            javascript/
+            **/build/teavm/**
+            **/dist/**
+            **/javascript/**
             **/*.html
             **/*.js
             **/*.wasm
