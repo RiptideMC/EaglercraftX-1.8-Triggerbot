@@ -16,11 +16,11 @@ jobs:
       - name: Build Web Client
         run: |
           chmod +x gradlew
-          # This command builds the client and the offline download
-          ./gradlew :target_teavm_javascript:teavmCompile :target_teavm_javascript:makeOfflineDownload --no-daemon
+          # This command tells Gradle to find the build task itself
+          ./gradlew assemble --no-daemon || ./gradlew build --no-daemon
           
-          echo "--- DEBUG: SEARCHING FOR ALL HTML FILES ---"
-          find . -name "*.html"
+          echo "--- DEBUG: LISTING ALL FILES CREATED ---"
+          find . -maxdepth 5 -not -path '*/.*'
           
       - name: Upload Everything Found
         uses: actions/upload-artifact@v4
@@ -30,3 +30,4 @@ jobs:
             **/*.html
             **/*.js
             **/*.epk
+            **/*.zip
